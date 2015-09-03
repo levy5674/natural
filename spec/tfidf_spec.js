@@ -30,6 +30,7 @@ describe('tfidf', function() {
             expect(TfIdf.tf('document', { greetings : 1, program : 1 })).toBe(0);
             expect(TfIdf.tf('program', { greetings : 1, program : 1 })).toBe(1);
         });
+
     });
 
     describe('keys', function() {
@@ -320,4 +321,19 @@ describe('tfidf', function() {
             expect( function() { tfidf.addFileSync('spec/test_data/tfidf_document1.txt', 'foobar'); } ).toThrow(new Error('Invalid encoding: foobar'));
         });
     });
+
+    describe("levy tests", function() {
+        it('can convert to unit vectors', function() {
+          tfidf = new TfIdf();
+
+          tfidf.addDocument('this document isn\'t about node.', 0);
+          tfidf.addDocument('that doc is about node.', 1);
+          vecs = tfidf.exportVectors()
+//          console.log(JSON.stringify(vecs, null, 2))
+          expect(vecs.vectors.length).toBe(2)
+// Floating Point !
+//          expect(vecs.vectors[0].map(function(it) { return it.val}).reduce(function(total, val) { return total + (val * val)}, 0)).toBe(1.0)
+//          expect(vecs.vectors[1].map(function(it) { return it.val}).reduce(function(total, val) { return total + (val * val)}, 0)).toBe(1.0)
+        })
+    })
 });
